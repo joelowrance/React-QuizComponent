@@ -4,12 +4,15 @@ import QuizQuestionButton from "./QuizQuestionButton";
 class QuizQuestion extends Component {
     constructor(props) {
         super(props);
+        this.state = { incorrectAnswer: false };
     }
 
     handleClick(button_text) {
-        console.log(button_text, this.props.quiz_question.anwer);
         if (button_text === this.props.quiz_question.answer) {
+            this.setState({ incorrectAnswer: false });
             this.props.showNextQuestionHandler();
+        } else {
+            this.setState({ incorrectAnswer: true });
         }
     }
 
@@ -23,10 +26,18 @@ class QuizQuestion extends Component {
                 <section className="buttons">
                     <ul>
                         {this.props.quiz_question.answer_options.map((a, ix) => {
-                            return <QuizQuestionButton key={ix} clickHandler={this.handleClick.bind(this)} button_text={a} key={ix} />
+                            return <QuizQuestionButton
+                                key={ix}
+                                clickHandler={this.handleClick.bind(this)}
+                                button_text={a} />
                         })}
                     </ul>
                 </section>
+                {
+                    this.state.incorrectAnswer ?
+                        <p className="error">Sorry, that's not right.</p> :
+                        null
+                }
             </main>
         );
     }
